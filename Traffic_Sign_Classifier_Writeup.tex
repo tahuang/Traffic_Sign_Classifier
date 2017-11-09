@@ -130,6 +130,19 @@ I changed the max pooling in the LeNet to average pooling because it seemed like
 I also added one more fully connected layer and dropout layers after 3 of the 4 fully connected layers. Dropouts prevent overfitting because they randomly drop units from the network during training so that the final model isn't so heavily dependent on the training data. I tuned the keep unit probability for the dropout layers empirically by just testing a few to see which one achieved the best validation performance. I found that a keep probability of 0.8 worked the best.
 
 \section{Testing a Model on New Images}
+Here are five German traffic signs that I found on the web:
+\begin{figure}[!h]
+\includegraphics[scale = 0.3]{traffic-signs-data/9.jpg}
+\includegraphics[scale = 0.2]{traffic-signs-data/100_1607.jpg}
+\includegraphics[scale = 2]{traffic-signs-data/522934973.jpg}
+\includegraphics[scale = 0.8]{traffic-signs-data/images.jpg}
+\includegraphics[scale = 0.3]{traffic-signs-data/Stop_sign.jpg}
+\end{figure}
+
+The third and last images might be a little difficult to classify because they have various shading across the traffic sign. Additionally, the third and fourth images might be challenging because they have irrelevant signs near the main traffic sign. However, using normalization and cropping, these problems should be mitigated through preprocessing.
+
+My CNN was able to predict each of the new traffic signs correctly for 100\% accuracy. This is similar to the test set accuracy of 0.917.
+
 
 \section{Visualizing the Neural Network}
 
