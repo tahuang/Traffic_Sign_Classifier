@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{graphicx}
+\usepackage{subfig}
 
 \title{CarND Traffic Sign Classifier Project Writeup}
 \author{Tiffany Huang}
@@ -121,7 +122,7 @@ To train the model, I used a batch size of 128 with 10 epochs and an Adam optimi
 
 My final model results were a training accuracy of 0.975, a validation accuracy of 0.947, and a test set accuracy of 0.917. This is calculated in the \verb|evaluate(X_data, y_data, dropout_keep)| function which is called in the cell below it. The test accuracy is calculated in the "Predict the Sign Type for Each Image" section
 
-I chose to use the LeNet architecture because it was originally used to classify numbers in an image. Since, traffic signs can also be classified based on similar features to numbers such as shapes (and some traffic signs even have numbers on them), I believed LeNet to be a good starting point for the traffic sign classification problem.
+I chose to use the LeNet architecture [1] because it was originally used to classify numbers in an image. Since, traffic signs can also be classified based on similar features to numbers such as shapes (and some traffic signs even have numbers on them), I believed LeNet to be a good starting point for the traffic sign classification problem.
 
 LeNet by itself could only achieve a validation accuracy of about 0.880, so I had to adjust the architecture a bit. The problem was overfitting because the training accuracy was about 0.1 higher than the validation accuracy. I added two convolutional layers on top of LeNet because traffic signs are generally more complicated than simple numeric digits. Additional convolutional layers allow the network to build up a more complex understanding of the image, combining simpler characteristics in earlier layers like basic lines and simple shapes to form a traffic sign. 
 
@@ -132,21 +133,130 @@ I also added one more fully connected layer and dropout layers after 3 of the 4 
 \section{Testing a Model on New Images}
 Here are five German traffic signs that I found on the web:
 \begin{figure}[!h]
-\includegraphics[scale = 0.3]{traffic-signs-data/9.jpg}
-\includegraphics[scale = 0.2]{traffic-signs-data/100_1607.jpg}
-\includegraphics[scale = 2]{traffic-signs-data/522934973.jpg}
-\includegraphics[scale = 0.8]{traffic-signs-data/images.jpg}
-\includegraphics[scale = 0.3]{traffic-signs-data/Stop_sign.jpg}
+\subfloat[Image 1]{\includegraphics[scale = 0.2]{traffic-signs-data/100_1607.jpg}}
+\subfloat[Image 2]{\includegraphics[scale = 2]{traffic-signs-data/522934973.jpg}} \\
+\subfloat[Image 3]{\includegraphics[scale = 0.3]{traffic-signs-data/9.jpg}}
+\subfloat[Image 4]{\includegraphics[scale = 0.8]{traffic-signs-data/images.jpg}} \\
+\subfloat[Image 5]{\includegraphics[scale = 0.3]{traffic-signs-data/Stop_sign.jpg}}
 \end{figure}
 
-The third and last images might be a little difficult to classify because they have various shading across the traffic sign. Additionally, the third and fourth images might be challenging because they have irrelevant signs near the main traffic sign. However, using normalization and cropping, these problems should be mitigated through preprocessing.
+The second and last images might be a little difficult to classify because they have various shading across the traffic sign. Additionally, the third and fourth images might be challenging because they have irrelevant signs near the main traffic sign. However, using normalization and cropping, these problems should be mitigated through preprocessing. Here are the results of the prediction:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Image} & \textbf{Prediction} \\
+\hline
+Right-of-way at next intersection & Right-of-way at next intersection \\
+\hline
+Turn right ahead & Turn right ahead \\
+\hline
+Roundabout mandatory & Roundabout mandatory \\
+\hline
+Speed limit (30km/h) & Speed limit (30km/h) \\
+\hline
+Stop & Stop \\
+\hline
+\end{tabular}
+\end{center}
+My CNN was able to predict each of the new traffic signs correctly for 100\% accuracy. This is similar to the test set accuracy of 0.917. The code for making predictions using my final model are in cells 12 - 14 in my Ipython notebook. 
 
-My CNN was able to predict each of the new traffic signs correctly for 100\% accuracy. This is similar to the test set accuracy of 0.917.
+We can look at the softmax probabilities for each image to see how sure my model was on each image. This code can be found in cell 15 of my Ipython notebook. For all 5 images, the model was very sure about its answer. Here are the top 5 softmax probabilities for each image:
 
+\begin{figure}[!h]
+\subfloat{\includegraphics[scale = 0.1]{traffic-signs-data/100_1607.jpg}} \\
+\subfloat{\begin{tabular}{|c|c|}
+\hline
+\textbf{Prediction} & \textbf{Probability} \\
+\hline
+Right-of-way at next intersection & 1.00 \\
+\hline
+Beware of ice/snow & 2.18e-8 \\
+\hline
+Pedestrians & 5.14e-9 \\
+\hline
+Speed limit (60km/h) & 1.86e-11 \\
+\hline
+Children crossing & 1.03e-11 \\
+\hline
+\end{tabular}}
+\end{figure}
 
-\section{Visualizing the Neural Network}
+\begin{figure}[!h]
+\subfloat{\includegraphics[scale = 2]{traffic-signs-data/522934973.jpg}} \\
+\subfloat{\begin{tabular}{|c|c|}
+\hline
+\textbf{Prediction} & \textbf{Probability} \\
+\hline
+Turn right ahead & 1.00 \\
+\hline
+Keep left & 2.19e-9 \\
+\hline
+General caution & 1.76e-11 \\
+\hline
+Go straight or left & 9.48e-12 \\
+\hline
+Bumpy road & 7.88e-12 \\
+\hline
+\end{tabular}}
+\end{figure}
 
-\bibliographystyle{abbrv}
-\bibliography{main}
+\begin{figure}[!h]
+\subfloat{\includegraphics[scale = 0.3]{traffic-signs-data/9.jpg}} \\
+\subfloat{\begin{tabular}{|c|c|}
+\hline
+\textbf{Prediction} & \textbf{Probability} \\
+\hline
+Roundabout mandatory & 0.997 \\
+\hline
+Priority road & 1.78e-3 \\
+\hline
+Speed limit (120km/h) & 2.97e-4 \\
+\hline
+Right-of-way at next intersection & 2.29e-4 \\
+\hline
+Speed limit (100km/h) & 1.11e-4 \\
+\hline
+\end{tabular}}
+\end{figure}
+
+\begin{figure}[!h]
+\subfloat{\includegraphics[scale = 0.8]{traffic-signs-data/images.jpg}} \\
+\subfloat{\begin{tabular}{|c|c|}
+\hline
+\textbf{Prediction} & \textbf{Probability} \\
+\hline
+Speed limit (30km/h) & 1.00 \\
+\hline
+Speed limit (80km/h) & 4.44e-5 \\
+\hline
+Speed limit (50km/h) & 4.72e-7 \\
+\hline
+Speed limit (20km/h) & 1.99e-7 \\
+\hline
+Speed limit (70km/h) & 5.18e-8 \\
+\hline
+\end{tabular}}
+\end{figure}
+
+\begin{figure}[!h]
+\subfloat{\includegraphics[scale = 0.3]{traffic-signs-data/Stop_sign.jpg}} \\
+\subfloat{\begin{tabular}{|c|c|}
+\hline
+\textbf{Prediction} & \textbf{Probability} \\
+\hline
+Stop & 1.00 \\
+\hline
+No entry & 7.02e-7 \\
+\hline
+Yield & 2.65e-8 \\
+\hline
+No vehicles & 1.20e-8 \\
+\hline
+Speed limit (30km/h) & 8.96e-9 \\
+\hline
+\end{tabular}}
+\end{figure}
+
+[1] Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner, "Gradient-Based Learning Applied to Document Recognition," \textit{Proc. IEEE}, vol.86, no. 11, pp. 2278-2324, Nov. 1998.
 
 \end{document}
